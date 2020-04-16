@@ -112,7 +112,7 @@ Node* create_node(int value) {
     return new;
 }
 
-int insert_node(BinaryTree* root, int value) {
+int insert_value(BinaryTree* root, int value) {
     if(!tree_exist(root)) {
         printf("A árvore pode não ter sido inicializada.\n");
         return 0;
@@ -123,9 +123,60 @@ int insert_node(BinaryTree* root, int value) {
         return 1;        
     }
     if ((*root)->info > value) {                
-        insert_node(&((*root)->left), value);
-    } else {              
-        insert_node(&((*root)->right), value);
-    }
+        insert_value(&((*root)->left), value);
+    } else if ((*root)->info < value) {              
+        insert_value(&((*root)->right), value);
+    } else {
+        printf("Esse número já existe na árvore.");
+    }    
     return 1;    
+}
+
+Node* remove_node(Node* this) {
+    Node *auxiliar_node, *return_node;
+    if(this->left == NULL) {
+        return_node = this->right;
+        free(this);
+        return return_node;
+    }
+    auxiliar_node = this;
+    return_node = this->left;
+    while (return_node->right != NULL) {
+        auxiliar_node = return_node;
+        return_node = return_node->right;
+    }
+    if(auxiliar_node != this) {
+        auxiliar_node->right = return_node;
+        return_node->left = this->left;
+    }
+    return_node->right = this->right;
+    free(this);
+    return return_node;    
+}
+
+
+int delete_value(BinaryTree* root, int value) {
+    if (is_empty(root)) {
+        return 0;
+    }
+    Node *previous = NULL;
+    Node *this_node = root;
+    while (this_node != NULL) {
+        if (value == this_node->info) {
+            if (this_node == *root) // Testa se está removendo a raiz da árvore
+                *root = remove_node(this_node); // O retorno da função remove_node seŕa nova raiz da ŕavore
+            else {
+                if (previous->right == this_node) // Testa se o nó que será exluído está a direita do nó anterior
+                    previous->right = remove_node(this_node); 
+                else                              // Senão está a esquerda
+                    previous->left = remove_node(this_node);                    
+            }
+            return 1;
+        }
+        previous = this_node;
+        if ( value > this_node->info)
+            this_node = this_node->right;
+        else
+            this_node = this_node->left;
+    }    
 }

@@ -21,7 +21,7 @@ int main() {
     int array_size = sizeof number / sizeof number[0];
     printf("\nTamanho do vetor: %d\n", array_size);
     for (int i = 0; i < array_size; i++) {
-        int value = insert_node(tree_root, number[i]);
+        int value = insert_value(tree_root, number[i]);
         if (value != 1) {
             printf("Algo deu errado.\n");
         }
