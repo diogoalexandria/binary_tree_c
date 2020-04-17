@@ -122,14 +122,16 @@ int insert_value(BinaryTree* root, int value) {
         printf("Novo nó inserido: %d\n", value);
         return 1;        
     }
+    int answer;
     if ((*root)->info > value) {                
-        insert_value(&((*root)->left), value);
+        answer = insert_value(&((*root)->left), value);
     } else if ((*root)->info < value) {              
-        insert_value(&((*root)->right), value);
+        answer = insert_value(&((*root)->right), value);
     } else {
         printf("Esse número já existe na árvore.");
+        return 0;
     }    
-    return 1;    
+    return answer;    
 }
 
 Node* remove_node(Node* this) {
@@ -146,21 +148,21 @@ Node* remove_node(Node* this) {
         return_node = return_node->right;
     }
     if(auxiliar_node != this) {
-        auxiliar_node->right = return_node;
+        auxiliar_node->right = return_node->left;
         return_node->left = this->left;
     }
     return_node->right = this->right;
+    printf("Nó deletado: %d\n", this->info);
     free(this);
     return return_node;    
 }
-
 
 int delete_value(BinaryTree* root, int value) {
     if (is_empty(root)) {
         return 0;
     }
     Node *previous = NULL;
-    Node *this_node = root;
+    Node *this_node = *root;
     while (this_node != NULL) {
         if (value == this_node->info) {
             if (this_node == *root) // Testa se está removendo a raiz da árvore
@@ -178,5 +180,22 @@ int delete_value(BinaryTree* root, int value) {
             this_node = this_node->right;
         else
             this_node = this_node->left;
-    }    
+    }
+    printf("Elemento não encontrado para exclusão.\n");
+    return 0;    
+}
+
+int find_value(BinaryTree* root, int value) {
+    if (is_empty(root)) {
+        return 0;
+    }
+    int answer;
+    if((*root)->info == value) {
+        return 1;
+    } else if ((*root)->info > value) {
+        answer = find_value(&((*root)->left), value);
+    } else {
+        answer = find_value(&((*root)->right), value);
+    }
+    return answer;
 }

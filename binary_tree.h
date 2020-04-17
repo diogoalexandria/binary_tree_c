@@ -14,5 +14,6 @@ int delete_value(BinaryTree* root, int value);
 void pre_order(BinaryTree* root);
 void in_order(BinaryTree* root);
 void post_order(BinaryTree* root);
+int find_value(BinaryTree* root, int values);
 
 #endif
